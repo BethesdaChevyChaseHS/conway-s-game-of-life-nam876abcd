@@ -19,6 +19,10 @@ public class Grid extends JPanel implements ActionListener {
         setPreferredSize(new Dimension(cols * cellSize, rows * cellSize));
         if(customStart){
             //ADD YOUR INTIALIZATION HERE
+            this.grid[5][5] = 1;
+            this.grid[5][6] = 1;
+            this.grid[6][5] = 1;
+            this.grid[6][6] = 1;
         }else if(randomStart){
             //initialize grid to random values:
             for(int i = 0; i < rows;i++){
@@ -65,17 +69,49 @@ public class Grid extends JPanel implements ActionListener {
 
     //ALL YOUR CODE GOES HERE
     public void nextGeneration() {
-        //1 Create a new temporary new array to store the values of the next generation
+        // 1 Create a new temporary array to store the values of the next generation
+        int[][] tempGrid = new int[rows][cols];
 
-        //2 Visit every cell in the new temporary grid. Check the number of neighboring cells, and based on the rules determine whether the cell will be alive or dead.
-        //Watch out for edge cases!
+        // 2 Visit every cell in the new temporary grid. Check the number of neighboring cells, and based on the rules determine whether the cell will be alive or dead.
+        // Watch out for edge cases!
+        for (int row = 0; row < this.rows; row++) {
+            for (int col = 0; col < this.cols; col++) {
+                int numAliveNeighbors = 0;
+                for (int rowOffset = -1; rowOffset <= 1; rowOffset++) {
+                    for (int colOffset = -1; colOffset <= 1; colOffset++) {
+                        if (rowOffset == 0 && colOffset == 0) continue;
+                        int neighborRow = row + rowOffset;
+                        int neighborCol = col + colOffset;
+                        // CHECK IN BOUNDS
+                        if (neighborRow >= 0 && neighborRow < rows && neighborCol >= 0 && neighborCol < cols) {
+                            numAliveNeighbors += this.grid[neighborRow][neighborCol];
+                        }
+                    }
+                }
 
-        //3 Copy the values of your temporary grid to the real grid
-
-
-        //don't mess with this part
+                // Determine if the cell will be alive or dead
+                if (this.grid[row][col] == 1) { // Cell is currently alive
+                    if (numAliveNeighbors < 2 || numAliveNeighbors > 3) {
+                        tempGrid[row][col] = 0; // Cell dies
+                    } else {
+                        tempGrid[row][col] = 1; // Cell stays alive
+                    }
+                } else { // Cell is currently dead
+                    if (numAliveNeighbors == 3) {
+                        tempGrid[row][col] = 1; // Cell becomes alive
+                    } else {
+                        tempGrid[row][col] = 0; // Cell stays dead
+                    }
+                }
+            }
+        }
+        // 3 Copy the values of your temporary grid to the real grid
+        this.grid = tempGrid;
+        // don't mess with this part
         repaint();
     }
+
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
