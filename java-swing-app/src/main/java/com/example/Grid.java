@@ -89,18 +89,17 @@ public class Grid extends JPanel implements ActionListener {
                     }
                 }
 
-                // Determine if the cell will be alive or dead
-                if (this.grid[row][col] == 1) { // Cell is currently alive
+                if (this.grid[row][col] == 1) { 
                     if (numAliveNeighbors < 2 || numAliveNeighbors > 3) {
-                        tempGrid[row][col] = 0; // Cell dies
+                        tempGrid[row][col] = 0; 
                     } else {
-                        tempGrid[row][col] = 1; // Cell stays alive
+                        tempGrid[row][col] = 1; 
                     }
-                } else { // Cell is currently dead
+                } else { 
                     if (numAliveNeighbors == 3) {
-                        tempGrid[row][col] = 1; // Cell becomes alive
+                        tempGrid[row][col] = 1; 
                     } else {
-                        tempGrid[row][col] = 0; // Cell stays dead
+                        tempGrid[row][col] = 0; 
                     }
                 }
             }
